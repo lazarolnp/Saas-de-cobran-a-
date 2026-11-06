@@ -2,7 +2,7 @@
 
 MVP de SaaS para motoristas de transporte escolar cobrarem a mensalidade dos pais pelo **Pix Automático**, com Pix comum e lembretes pelo WhatsApp quando não houver autorização.
 
-> Status: **etapa 2 de 8 concluída** (base: projeto, autenticação, multi-tenant com RLS, modelo de dados e seed).
+> Status: **etapa 3 de 8 concluída** (provedor de pagamentos: interface, Mock, Asaas sandbox e tela de conexão).
 > O plano completo e as decisões estão em [`docs/ETAPA-1-PLANO.md`](docs/ETAPA-1-PLANO.md).
 
 ## Stack
@@ -50,6 +50,22 @@ npm run build && npm run test:e2e   # ponta a ponta em 360 px (requer db:seed)
 npm run lint && npm run typecheck
 ```
 
+## Provedor de pagamentos (Asaas)
+
+Toda regra de negócio fala com a interface `PaymentProvider` (`src/providers/payment-provider.ts`), nunca com o Asaas direto.
+
+- `AsaasProvider`: segue só o que está em docs.asaas.com. Cada endpoint usado está listado no topo do arquivo.
+- `MockProvider`: provedor simulado para desenvolvimento e testes. Aceita chaves começando com `mock_` (`mock_recusar` simula chave inválida). Os webhooks simulados têm o formato documentado do Asaas, e o simulador reproduz as sequências de eventos (adesão ativada, adesão recusada depois do pagamento, débito do Pix Automático e Pix comum).
+- O **ambiente** vem do `APP_ENV`. Fora de `production`, só o sandbox é usado. Em `production`, o modo simulado não aparece.
+- **Testar conexão:** `GET /v3/myAccount/status/`. Mostra também se o cadastro da conta já foi aprovado.
+
+### Como configurar o sandbox do Asaas
+
+1. Crie uma conta em https://sandbox.asaas.com (conta de teste, sem dinheiro real).
+2. No site (não no app), abra a área de **Integrações** e crie uma **chave de API**. Ela só aparece uma vez.
+3. No sistema, vá em **Ajustes → Onde você recebe**, escolha Asaas, cole a chave e toque em **Testar e conectar**.
+4. **Webhook:** se o `APP_URL` for público (https), o sistema cadastra o webhook sozinho (`POST /v3/webhooks`) com um token próprio. Se for `localhost`, a tela mostra a URL e o token para cadastro manual. Para testar localmente, exponha a porta 3000 com um túnel https, ajuste o `APP_URL` e reconecte.
+
 ## Estrutura
 
 ```
@@ -57,6 +73,8 @@ src/app/(auth)        entrar, cadastrar, ações de login
 src/app/(app)         área logada (layout + início)
 src/app/legal         termos e privacidade (TEXTO PROVISÓRIO)
 src/app/auth          confirmação de e-mail
+src/providers         PaymentProvider, AsaasProvider, MockProvider (+ simulador de webhooks)
+src/services          regras com banco + provedor (conexão com o provedor)
 src/lib               env, crypto, máscaras BR, dinheiro, datas, logger, rate limit, clientes Supabase
 src/proxy.ts          renovação de sessão e checagem otimista de login
 supabase/migrations   esquema + RLS

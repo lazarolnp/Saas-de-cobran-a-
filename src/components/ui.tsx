@@ -5,17 +5,18 @@
 import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 
-type Variant = "primary" | "secondary" | "danger" | "ghost";
+type Variant = "primary" | "dark" | "secondary" | "danger" | "ghost";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-brand-600 text-white hover:bg-brand-700 active:bg-brand-800 disabled:bg-gray-400",
+  primary: "bg-brand-600 text-white shadow-sm hover:bg-brand-700 active:bg-brand-800 disabled:bg-gray-400",
+  dark: "bg-ink text-white hover:bg-black disabled:bg-gray-400",
   secondary: "bg-white text-brand-700 border-2 border-brand-600 hover:bg-brand-50 disabled:opacity-60",
   danger: "bg-danger text-white hover:opacity-90 disabled:opacity-60",
   ghost: "bg-transparent text-brand-700 underline-offset-4 hover:underline",
 };
 
 const base =
-  "inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-5 text-lg font-semibold transition-colors disabled:cursor-not-allowed";
+  "inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full px-6 text-lg font-semibold transition-colors disabled:cursor-not-allowed";
 
 export function Button({ variant = "primary", className = "", ...props }: ComponentProps<"button"> & { variant?: Variant }) {
   return <button className={`${base} ${variants[variant]} ${className}`} {...props} />;
@@ -78,5 +79,21 @@ export function Alert({ tone = "info", children }: { tone?: "info" | "ok" | "war
 }
 
 export function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <section className={`rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-200 ${className}`}>{children}</section>;
+  return <section className={`rounded-2xl bg-white p-5 shadow-sm ring-1 ring-gray-200 ${className}`}>{children}</section>;
+}
+
+export function Badge({ tone = "info", children }: { tone?: "info" | "ok" | "warn" | "danger" | "neutral"; children: ReactNode }) {
+  const tones = {
+    info: "bg-brand-50 text-brand-700",
+    ok: "bg-ok-bg text-ok",
+    warn: "bg-warn-bg text-warn",
+    danger: "bg-danger-bg text-danger",
+    neutral: "bg-gray-100 text-gray-700",
+  };
+  return <span className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-semibold ${tones[tone]}`}>{children}</span>;
+}
+
+/** Ícone dentro de um quadrado arredondado azul-claro (padrão visual dos cartões). */
+export function IconTile({ children }: { children: ReactNode }) {
+  return <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-50 text-brand-600" aria-hidden>{children}</span>;
 }

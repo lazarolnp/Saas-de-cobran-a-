@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Criar conta" };
 export default function CadastrarPage() {
   return (
     <Card>
-      <h1 className="text-2xl font-bold">Criar conta</h1>
+      <h2 className="text-2xl font-bold">Criar conta</h2>
       <p className="mb-4 mt-1 text-gray-700">{TRIAL_DAYS} dias grátis. Não pedimos cartão.</p>
       <SignUpForm />
       <p className="mt-6 text-center text-base">

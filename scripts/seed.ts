@@ -109,7 +109,7 @@ async function main() {
   must(
     await db
       .from("provider_connections")
-      .insert({ tenant_id: tenantId, provider: "mock", environment: "sandbox", api_key_encrypted: encrypt("mock-key-demo", encKey!), api_key_hint: "demo", status: "ok", validated_at: new Date().toISOString() })
+      .insert({ tenant_id: tenantId, provider: "mock", environment: "sandbox", api_key_encrypted: encrypt("mock_demo", encKey!), api_key_hint: "demo", status: "ok", validated_at: new Date().toISOString() })
       .select("id"),
     "provider",
   );

@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Entrar" };
 export default function EntrarPage() {
   return (
     <Card>
-      <h1 className="mb-4 text-2xl font-bold">Entrar</h1>
+      <h2 className="mb-4 text-2xl font-bold">Entrar</h2>
       <SignInForm />
       <p className="mt-6 text-center text-base">
         Ainda não tem conta?{" "}

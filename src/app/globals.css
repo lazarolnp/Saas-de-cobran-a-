@@ -5,11 +5,13 @@
  * Cores com contraste AA ou melhor sobre o fundo.
  */
 @theme {
-  --color-brand-50: #eef6ff;
-  --color-brand-100: #d9eaff;
-  --color-brand-600: #1557b0;
-  --color-brand-700: #0f4590;
-  --color-brand-800: #0b356f;
+  --color-brand-50: #eef3ff;
+  --color-brand-100: #dbe5ff;
+  --color-brand-500: #2f6bff;
+  --color-brand-600: #1652f0;
+  --color-brand-700: #0f3fc2;
+  --color-brand-800: #0c3299;
+  --color-ink: #0f172a;
   --color-ok: #146c2e;
   --color-ok-bg: #e6f4ea;
   --color-warn: #8a4b00;

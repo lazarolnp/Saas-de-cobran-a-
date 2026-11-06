@@ -1,13 +1,18 @@
-import { PRODUCT_NAME } from "@/lib/product";
+import { BrandMark } from "@/components/brand";
 
 export default function AuthLayout({ children }: LayoutProps<"/">) {
   return (
-    <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-6 px-4 py-8">
-      <header className="text-center">
-        <p className="text-2xl font-bold text-brand-700">{PRODUCT_NAME}</p>
-        <p className="mt-1 text-gray-700">A mensalidade do transporte escolar cai pelo Pix, sem você precisar cobrar.</p>
-      </header>
-      {children}
-    </main>
+    <div className="flex flex-1 flex-col">
+      <section className="bg-brand-600 px-4 pb-16 pt-8 text-white">
+        <div className="mx-auto max-w-md">
+          <span className="inline-block rounded-2xl bg-white px-3 py-2">
+            <BrandMark size="lg" />
+          </span>
+          <h1 className="mt-6 text-3xl font-bold leading-tight">A mensalidade do transporte cai pelo Pix.</h1>
+          <p className="mt-2 text-lg text-brand-50">O pai autoriza uma vez e todo mês cai sozinho. Sem planilha, sem constrangimento.</p>
+        </div>
+      </section>
+      <main className="mx-auto -mt-10 flex w-full max-w-md flex-1 flex-col gap-6 px-4 pb-8">{children}</main>
+    </div>
   );
 }

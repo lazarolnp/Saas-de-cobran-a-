@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { Alert, Card } from "@/components/ui";
+import { Alert, ButtonLink, Card, IconTile } from "@/components/ui";
+import { IconPix } from "@/components/icons";
 import { requireTenant } from "@/lib/supabase/server";
 import { daysBetween, todaySP } from "@/lib/dates";
 
@@ -15,10 +16,11 @@ export default async function InicioPage() {
   const { supabase, user, tenant } = await requireTenant();
   if (!user || !tenant) redirect("/entrar");
 
-  const [routes, students, contracts] = await Promise.all([
+  const [routes, students, contracts, conn] = await Promise.all([
     supabase.from("routes").select("id", { count: "exact", head: true }).is("archived_at", null),
     supabase.from("students").select("id", { count: "exact", head: true }).eq("status", "ativo"),
     supabase.from("contracts").select("id", { count: "exact", head: true }).neq("status", "encerrado"),
+    supabase.from("provider_connections").select("status").maybeSingle(),
   ]);
 
   const trialDaysLeft = Math.max(0, daysBetween(todaySP(), todaySP(new Date(tenant.trial_ends_at))));
@@ -34,6 +36,23 @@ export default async function InicioPage() {
             ? `Seu teste grátis termina em ${trialDaysLeft} ${trialDaysLeft === 1 ? "dia" : "dias"}.`
             : "Seu teste grátis terminou. Fale com a gente para continuar usando."}
         </Alert>
+      )}
+
+      {!conn.data && (
+        <Card>
+          <div className="flex items-start gap-3">
+            <IconTile>
+              <IconPix />
+            </IconTile>
+            <div>
+              <h2 className="text-lg font-bold">Conecte sua conta de recebimento</h2>
+              <p className="mt-1 text-gray-700">É onde o dinheiro dos pais vai cair. Leva 2 minutos.</p>
+            </div>
+          </div>
+          <ButtonLink href="/configuracoes/recebimento" className="mt-4">
+            Conectar agora
+          </ButtonLink>
+        </Card>
       )}
 
       <div className="grid grid-cols-3 gap-3">
