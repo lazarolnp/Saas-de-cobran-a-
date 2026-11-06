@@ -8,3 +8,4 @@ export const BILLING_MODE_LABEL = {
 } as const;
 export const MONTHS_POLICY_LABEL = { doze: "12 meses", dez: "10 meses (sem janeiro e julho)", personalizada: "Meses escolhidos" } as const;
 export const MONTH_SHORT = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+export const CHARGE_STATUS_LABEL = { agendada: "Agendada", enviada: "Em aberto", paga: "Paga", atrasada: "Atrasada", cancelada: "Cancelada" } as const;

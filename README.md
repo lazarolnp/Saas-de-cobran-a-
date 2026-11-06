@@ -2,7 +2,7 @@
 
 MVP de SaaS para motoristas de transporte escolar cobrarem a mensalidade dos pais pelo **Pix Automático**, com Pix comum e lembretes pelo WhatsApp quando não houver autorização.
 
-> Status: **etapa 4 de 8 concluída** (cadastros de rotas, alunos, responsáveis e contratos, e importação por planilha).
+> Status: **etapa 5 de 8 concluída** (cobranças por competência, página pública de adesão e cobrança híbrida).
 > O plano completo e as decisões estão em [`docs/ETAPA-1-PLANO.md`](docs/ETAPA-1-PLANO.md).
 
 ## Stack
@@ -73,6 +73,18 @@ Toda regra de negócio fala com a interface `PaymentProvider` (`src/providers/pa
 - O formulário e a planilha usam a **mesma validação** (`src/domain/registration.ts`).
 - **Desconto de irmãos** (Ajustes): aplicado sozinho a partir do 2º aluno do mesmo responsável, identificado pelo hash do CPF.
 - Rotas que vêm na planilha e ainda não existem são criadas automaticamente.
+
+## Cobranças e adesão
+
+- **Adesão** (botão na tela do aluno): para tenant elegível, cria a autorização do Pix Automático com QR imediato. O pai paga o 1º mês e autoriza os próximos no mesmo QR. O link vale 7 dias (`ENROLLMENT_LINK_DAYS`). Sem Pix Automático, o mesmo botão gera um Pix comum.
+- **Página pública** `/p/{token}`: sem login. Mostra o primeiro nome do aluno, o nome do transporte, os valores, o passo a passo e um teto sugerido (+10%). Pede o **aceite** (registrado com data, versão do texto e hash do IP) antes de mostrar o QR. O token tem 256 bits; o banco guarda só o hash, mais uma cópia criptografada para remontar o link nos lembretes. A página tem limite de acessos, `noindex` e `no-referrer`.
+- **Rotina diária** `GET /api/cron/diario` (Vercel Cron às 00:30 de São Paulo, `Authorization: Bearer $CRON_SECRET`):
+  1. adesão sem pagamento depois de 7 dias passa para **Pix comum** (D8);
+  2. gera cada competência **8 dias úteis antes do vencimento** (a regra do Asaas pede 2 a 10), pulando os meses sem cobrança;
+  3. envia ao provedor: **Pix Automático** se a autorização está ativa e há pelo menos 2 dias úteis até o vencimento; caso contrário, **Pix comum**. Se o provedor recusar a autorização, a cobrança cai na hora para Pix comum;
+  4. marca como **atrasada** no dia seguinte ao vencimento.
+- **Idempotente:** `unique (contract_id, competence)` garante que rodar duas vezes não duplica.
+- Para testar localmente: `curl -H "Authorization: Bearer $CRON_SECRET" localhost:3000/api/cron/diario`.
 
 ## Estrutura
 

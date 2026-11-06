@@ -11,3 +11,6 @@ export const SAAS_PLANS = [
 ] as const;
 
 export const TRIAL_DAYS = 14;
+
+/** Validade do link de adesão (e do QR do Pix Automático), em dias. D8. */
+export const ENROLLMENT_LINK_DAYS = Math.min(30, Math.max(1, Number(process.env.ENROLLMENT_LINK_DAYS) || 7));

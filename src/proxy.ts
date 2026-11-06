@@ -6,7 +6,7 @@ import { NextResponse, type NextRequest } from "next/server";
  * OTIMISTA de login. A autorização de verdade acontece no servidor
  * (requireTenant) e no banco (RLS).
  */
-const PUBLIC_PREFIXES = ["/entrar", "/cadastrar", "/adesao", "/legal", "/api/webhooks", "/api/cron", "/auth"];
+const PUBLIC_PREFIXES = ["/entrar", "/cadastrar", "/p", "/legal", "/api/webhooks", "/api/cron", "/auth"];
 
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });

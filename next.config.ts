@@ -46,10 +46,12 @@ const nextConfig: NextConfig = {
       { source: "/:path*", headers: securityHeaders },
       // Link de adesão: não indexar e não guardar em cache compartilhado.
       {
-        source: "/adesao/:path*",
+        source: "/p/:path*",
         headers: [
           { key: "X-Robots-Tag", value: "noindex, nofollow" },
           { key: "Cache-Control", value: "private, no-store" },
+          // O token está na URL: não vazar para outros sites.
+          { key: "Referrer-Policy", value: "no-referrer" },
         ],
       },
     ];

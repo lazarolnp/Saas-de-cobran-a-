@@ -100,8 +100,10 @@ export async function connectProvider(actor: Actor, input: { provider: ProviderK
     logger.error("salvar_conexao_falhou", { tenantId: actor.tenantId, code: error.code });
     return { ok: false, message: "A chave funcionou, mas não conseguimos salvar. Tente de novo." };
   }
-  // MVP: um provedor ativo por tenant. Ao conectar um, remove o outro.
-  await db.from("provider_connections").delete().eq("tenant_id", actor.tenantId).neq("provider", input.provider);
+  // MVP: um provedor ativo por tenant. Ao trocar de provedor, remove o outro e
+  // esquece os clientes criados nele (serão recriados no novo provedor).
+  const { data: removed } = await db.from("provider_connections").delete().eq("tenant_id", actor.tenantId).neq("provider", input.provider).select("id");
+  if (removed?.length) await db.from("guardians").update({ provider_customer_id: null }).eq("tenant_id", actor.tenantId);
 
   const webhook = await setupWebhook(actor, provider);
   await audit(actor, "provedor.conectado", { provider: input.provider, webhook: webhook.mode, accountApproved: check.accountApproved });

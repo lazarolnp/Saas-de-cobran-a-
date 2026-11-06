@@ -226,17 +226,38 @@ async function main() {
     }
 
     if (mode === "aguardando_adesao") {
-      // Link de adesão de exemplo (o token em claro só é mostrado no console).
+      // Adesão pendente: a 1ª cobrança é o QR do Pix Automático, com link público.
+      const expires = new Date(Date.now() + 7 * 86_400_000);
+      const enrollment = must(
+        await db
+          .from("charges")
+          .insert({
+            tenant_id: tenantId,
+            contract_id: contract.id,
+            authorization_id: authorizationId,
+            competence: thisMonth,
+            amount_cents: amount,
+            due_date: expires.toISOString().slice(0, 10),
+            status: "enviada",
+            method: "pix_automatico",
+            is_enrollment: true,
+            provider: "mock",
+            pix_payload: `PIX-SIMULADO|adesao-${i + 1}|${amount}`,
+          })
+          .select("id")
+          .single(),
+        "cobrança de adesão",
+      );
       const token = randomToken();
       must(
         await db
           .from("enrollment_links")
-          .insert({ tenant_id: tenantId, contract_id: contract.id, authorization_id: authorizationId, token_hash: sha256(token), expires_at: new Date(Date.now() + 7 * 86_400_000).toISOString() })
+          .insert({ tenant_id: tenantId, contract_id: contract.id, authorization_id: authorizationId, charge_id: enrollment.id, purpose: "adesao", token_hash: sha256(token), token_encrypted: encrypt(token, encKey!), expires_at: expires.toISOString() })
           .select("id"),
         "link",
       );
-      console.log(`  link de adesão (${FIRST_NAMES[i]}): /adesao/${token}`);
-      continue; // sem cobranças ainda: a 1ª é a da adesão
+      console.log(`  link de adesão (${FIRST_NAMES[i]}): /p/${token}`);
+      continue;
     }
 
     // 5) Cobranças: 2 meses atrás, mês passado, mês atual e próximo mês.
@@ -260,7 +281,7 @@ async function main() {
         method,
         provider: "mock" as const,
         provider_charge_id: `mock_pay_${i + 1}_${competence}`,
-        pix_payload: `00020126580014br.gov.bcb.pix0136demo-${i + 1}-${competence}5204000053039865802BR6304ABCD`,
+        pix_payload: `PIX-SIMULADO|demo-${i + 1}|${competence}`,
         is_enrollment: offset === -2,
       };
 
@@ -290,7 +311,18 @@ async function main() {
     }
     if (i === 11 && rows[rows.length - 1]) rows[rows.length - 1] = { ...rows[rows.length - 1], status: "cancelada" };
 
-    must(await db.from("charges").insert(rows).select("id"), "cobranças");
+    const inserted = must(await db.from("charges").insert(rows).select("id, status, method"), "cobranças");
+    // Links públicos das cobranças de Pix comum em aberto (usados nos lembretes).
+    for (const ch of inserted.filter((x) => x.method === "pix_comum" && (x.status === "enviada" || x.status === "atrasada"))) {
+      const token = randomToken();
+      must(
+        await db
+          .from("enrollment_links")
+          .insert({ tenant_id: tenantId, contract_id: contract.id, charge_id: ch.id, purpose: "cobranca", token_hash: sha256(token), token_encrypted: encrypt(token, encKey!), expires_at: new Date(Date.now() + 60 * 86_400_000).toISOString() })
+          .select("id"),
+        "link de cobrança",
+      );
+    }
   }
 
   // 6) Alguns lembretes pendentes para hoje.

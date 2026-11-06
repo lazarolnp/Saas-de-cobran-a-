@@ -15,6 +15,8 @@ const serverSchema = z.object({
     .refine((v) => Buffer.from(v, "base64").length === 32, "ENCRYPTION_KEY deve ter 32 bytes em base64"),
   APP_URL: z.url().default("http://localhost:3000"),
   APP_ENV: z.enum(["development", "test", "staging", "production"]).default("development"),
+  /** Segredo do cron (Vercel envia "Authorization: Bearer <CRON_SECRET>"). */
+  CRON_SECRET: z.string().min(16).optional(),
 });
 
 export type ServerEnv = z.infer<typeof serverSchema>;
