@@ -1,0 +1,12 @@
+aluno;escola;serie;rota;turno;responsavel;cpf;whatsapp;email;valor;vencimento;inicio;meses;desconto;proporcional
+Alice Prado;EMEF Norte;1º ano;Rota Escola Norte;manhã;Responsável Prado;39053344020;(19) 98000-1000;;380,00;10;01/02/2026;10;;não
+Bruno Teles;EMEF Norte;2º ano;Rota Escola Sul;tarde;Responsável Teles;39053344101;(19) 98001-1001;;385,00;5;01/02/2026;12;;não
+Cecília Rocha;EMEF Norte;3º ano;Rota Escola Norte;manhã;Responsável Rocha;39053344292;(19) 98002-1002;;390,00;10;01/02/2026;12;;não
+Diego Melo;EMEF Norte;4º ano;Rota Escola Sul;tarde;Responsável Melo;39053344373;(19) 98003-1003;;395,00;5;01/02/2026;10;;não
+Eva Nunes;EMEF Norte;5º ano;Rota Escola Norte;manhã;Responsável Nunes;39053344454;(19) 98004-1004;;400,00;10;01/02/2026;12;;não
+Fábio Dias;EMEF Norte;1º ano;Rota Escola Sul;tarde;Responsável Dias;39053344535;(19) 98005-1005;;405,00;5;01/02/2026;12;;não
+Gabi Freitas;EMEF Norte;2º ano;Rota Escola Norte;manhã;Responsável Freitas;39053344616;(19) 98006-1006;;410,00;10;01/02/2026;10;;não
+Hugo Ramos;EMEF Norte;3º ano;Rota Escola Sul;tarde;Responsável Ramos;39053344705;(19) 98007-1007;;415,00;5;01/02/2026;12;;não
+Íris Campos;EMEF Norte;4º ano;Rota Escola Norte;manhã;Sônia Campos;39053345930;(19) 98008-1008;;420,00;10;01/02/2026;12;;não
+Júlio Campos;EMEF Norte;5º ano;Rota Escola Sul;tarde;Sônia Campos;39053345930;(19) 98009-1009;;425,00;5;01/02/2026;10;;não
+Linha Com Erro;;;;manhã;Fulano;123.456.789-00;19999;;abc;40;;;;

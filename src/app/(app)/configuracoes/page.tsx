@@ -8,6 +8,7 @@ import { formatBRL } from "@/lib/money";
 import { SAAS_PLANS, TRIAL_DAYS } from "@/lib/product";
 import { daysBetween, todaySP } from "@/lib/dates";
 import { requireTenant } from "@/lib/supabase/server";
+import { SiblingDiscountForm } from "./sibling-form";
 
 export const metadata: Metadata = { title: "Ajustes" };
 
@@ -28,6 +29,15 @@ export default async function ConfiguracoesPage() {
         subtitle="Conta Asaas e Pix Automático"
         badge={conn ? <Badge tone={conn.status === "ok" ? "ok" : "danger"}>{conn.status === "ok" ? "Conectada" : "Com problema"}</Badge> : <Badge tone="warn">Falta conectar</Badge>}
       />
+
+      <Card>
+        <h2 className="text-lg font-bold">Desconto para irmãos</h2>
+        <p className="text-gray-700">Aplicado sozinho a partir do 2º aluno do mesmo responsável. O 1º paga o valor cheio.</p>
+        <SiblingDiscountForm
+          type={tenant.sibling_discount_type}
+          value={tenant.sibling_discount_type === "percentual" ? String(tenant.sibling_discount_value / 100).replace(".", ",") : tenant.sibling_discount_type === "valor" ? (tenant.sibling_discount_value / 100).toFixed(2).replace(".", ",") : ""}
+        />
+      </Card>
 
       {/* 7.8: plano do SaaS (placeholder; cobrança manual no MVP) */}
       <Card>

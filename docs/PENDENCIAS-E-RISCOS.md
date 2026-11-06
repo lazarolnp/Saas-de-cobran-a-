@@ -1,4 +1,4 @@
-# Pendências e riscos (atualizado na etapa 3)
+# Pendências e riscos (atualizado na etapa 4)
 
 ## Dependem de confirmação com o Asaas
 
@@ -22,3 +22,10 @@
 - **Perda da `ENCRYPTION_KEY`** torna ilegíveis as chaves de API e os CPFs. Guardar em cofre de segredos e ter backup.
 - O estado do `MockProvider` fica em memória: serve só para desenvolvimento e testes.
 - Na Vercel, o limite de tentativas depende do `x-forwarded-for` repassado pela plataforma.
+
+## Pendências de produto (para revisar no final)
+
+- **Importação só em CSV.** Arquivos .xlsx não são lidos: o motorista precisa salvar como CSV. A tela explica como fazer. Dá para ler .xlsx depois com uma biblioteca.
+- **Assistente de onboarding em passos (7.1).** As peças já existem (cadastro, conexão, rota, alunos), mas o assistente que guia passo a passo entra na etapa 7, junto com o painel.
+- **Trocar o CPF de quem paga** não é permitido na edição: é preciso encerrar o contrato e cadastrar de novo, porque o CPF fica ligado às cobranças no provedor.
+- **Mesmo CPF com nomes diferentes** na planilha gera só um aviso. O sistema usa o primeiro responsável cadastrado.

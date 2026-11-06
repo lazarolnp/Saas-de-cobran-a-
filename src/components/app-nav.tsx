@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { IconHome, IconSettings } from "@/components/icons";
+import { IconBus, IconHome, IconSettings, IconUsers } from "@/components/icons";
 
 /** Menu inferior fixo, ao alcance do polegar. Itens novos entram nas próximas etapas. */
 const ITEMS = [
   { href: "/inicio", label: "Início", Icon: IconHome },
+  { href: "/alunos", label: "Alunos", Icon: IconUsers },
+  { href: "/rotas", label: "Rotas", Icon: IconBus },
   { href: "/configuracoes", label: "Ajustes", Icon: IconSettings },
 ];
 

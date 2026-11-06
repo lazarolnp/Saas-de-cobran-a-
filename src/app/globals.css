@@ -36,3 +36,8 @@ body {
   outline: 3px solid var(--color-brand-600);
   outline-offset: 2px;
 }
+
+/* fieldset tem min-width: min-content por padrão e estoura telas de 360 px. */
+fieldset {
+  min-width: 0;
+}

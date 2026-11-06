@@ -2,7 +2,7 @@
 
 MVP de SaaS para motoristas de transporte escolar cobrarem a mensalidade dos pais pelo **Pix Automático**, com Pix comum e lembretes pelo WhatsApp quando não houver autorização.
 
-> Status: **etapa 3 de 8 concluída** (provedor de pagamentos: interface, Mock, Asaas sandbox e tela de conexão).
+> Status: **etapa 4 de 8 concluída** (cadastros de rotas, alunos, responsáveis e contratos, e importação por planilha).
 > O plano completo e as decisões estão em [`docs/ETAPA-1-PLANO.md`](docs/ETAPA-1-PLANO.md).
 
 ## Stack
@@ -66,6 +66,14 @@ Toda regra de negócio fala com a interface `PaymentProvider` (`src/providers/pa
 3. No sistema, vá em **Ajustes → Onde você recebe**, escolha Asaas, cole a chave e toque em **Testar e conectar**.
 4. **Webhook:** se o `APP_URL` for público (https), o sistema cadastra o webhook sozinho (`POST /v3/webhooks`) com um token próprio. Se for `localhost`, a tela mostra a URL e o token para cadastro manual. Para testar localmente, exponha a porta 3000 com um túnel https, ajuste o `APP_URL` e reconecte.
 
+## Cadastros e importação
+
+- **Formulário único** (`/alunos/novo`): aluno + quem paga + mensalidade. As opções avançadas (início, meses, desconto e 1º mês proporcional) ficam recolhidas.
+- **Planilha** (`/alunos/importar`): modelo CSV para baixar (separador `;`, abre no Excel), pré-visualização, validação linha a linha e relatório de erros para baixar. A gravação é tudo ou nada, numa única transação (`register_students`). A planilha é validada de novo no servidor ao confirmar, e a pré-visualização nunca devolve o CPF ao navegador.
+- O formulário e a planilha usam a **mesma validação** (`src/domain/registration.ts`).
+- **Desconto de irmãos** (Ajustes): aplicado sozinho a partir do 2º aluno do mesmo responsável, identificado pelo hash do CPF.
+- Rotas que vêm na planilha e ainda não existem são criadas automaticamente.
+
 ## Estrutura
 
 ```
@@ -73,6 +81,7 @@ src/app/(auth)        entrar, cadastrar, ações de login
 src/app/(app)         área logada (layout + início)
 src/app/legal         termos e privacidade (TEXTO PROVISÓRIO)
 src/app/auth          confirmação de e-mail
+src/domain            regras puras (cadastro, importação)
 src/providers         PaymentProvider, AsaasProvider, MockProvider (+ simulador de webhooks)
 src/services          regras com banco + provedor (conexão com o provedor)
 src/lib               env, crypto, máscaras BR, dinheiro, datas, logger, rate limit, clientes Supabase

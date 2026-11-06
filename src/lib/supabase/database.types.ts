@@ -377,14 +377,14 @@ isOneToOne: false
                   ]
                 },"tenants": {
                   Row: {
-                    "city": string | null,"created_at": string,"document": string | null,"id": string,"is_demo": boolean,"name": string,"onboarding_completed_at": string | null,"phone": string | null,"pix_automatico_eligibility": Database["public"]['Enums']["eligibility"],"plan": Database["public"]['Enums']["saas_plan"],"subscription_status": Database["public"]['Enums']["subscription_status"],"trial_ends_at": string,"updated_at": string
+                    "city": string | null,"created_at": string,"document": string | null,"id": string,"is_demo": boolean,"name": string,"onboarding_completed_at": string | null,"phone": string | null,"pix_automatico_eligibility": Database["public"]['Enums']["eligibility"],"plan": Database["public"]['Enums']["saas_plan"],"sibling_discount_type": Database["public"]['Enums']["discount_type"],"sibling_discount_value": number,"subscription_status": Database["public"]['Enums']["subscription_status"],"trial_ends_at": string,"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "city"?: string | null,"created_at"?: string,"document"?: string | null,"id"?: string,"is_demo"?: boolean,"name": string,"onboarding_completed_at"?: string | null,"phone"?: string | null,"pix_automatico_eligibility"?: Database["public"]['Enums']["eligibility"],"plan"?: Database["public"]['Enums']["saas_plan"],"subscription_status"?: Database["public"]['Enums']["subscription_status"],"trial_ends_at"?: string,"updated_at"?: string
+                    "city"?: string | null,"created_at"?: string,"document"?: string | null,"id"?: string,"is_demo"?: boolean,"name": string,"onboarding_completed_at"?: string | null,"phone"?: string | null,"pix_automatico_eligibility"?: Database["public"]['Enums']["eligibility"],"plan"?: Database["public"]['Enums']["saas_plan"],"sibling_discount_type"?: Database["public"]['Enums']["discount_type"],"sibling_discount_value"?: number,"subscription_status"?: Database["public"]['Enums']["subscription_status"],"trial_ends_at"?: string,"updated_at"?: string
                   }
                   Update: {
-                    "city"?: string | null,"created_at"?: string,"document"?: string | null,"id"?: string,"is_demo"?: boolean,"name"?: string,"onboarding_completed_at"?: string | null,"phone"?: string | null,"pix_automatico_eligibility"?: Database["public"]['Enums']["eligibility"],"plan"?: Database["public"]['Enums']["saas_plan"],"subscription_status"?: Database["public"]['Enums']["subscription_status"],"trial_ends_at"?: string,"updated_at"?: string
+                    "city"?: string | null,"created_at"?: string,"document"?: string | null,"id"?: string,"is_demo"?: boolean,"name"?: string,"onboarding_completed_at"?: string | null,"phone"?: string | null,"pix_automatico_eligibility"?: Database["public"]['Enums']["eligibility"],"plan"?: Database["public"]['Enums']["saas_plan"],"sibling_discount_type"?: Database["public"]['Enums']["discount_type"],"sibling_discount_value"?: number,"subscription_status"?: Database["public"]['Enums']["subscription_status"],"trial_ends_at"?: string,"updated_at"?: string
                   }
                   Relationships: [
                     
@@ -465,6 +465,12 @@ isOneToOne: false
                            },
 "hit_rate_limit":
 { Args: { "p_key": string,"p_max": number,"p_window_seconds": number }; Returns: boolean
+                           },
+"normalize_name":
+{ Args: { "p": string }; Returns: string
+                           },
+"register_students":
+{ Args: { "p_rows": Json }; Returns: Json
                            }
           }
           Enums: {
